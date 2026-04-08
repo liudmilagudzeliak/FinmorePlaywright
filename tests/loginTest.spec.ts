@@ -12,6 +12,7 @@ test.describe('Check login test functions', () => {
         await expect(emailInput).toBeVisible({timeout: 5000});
         await expect(emailInput).toBeEnabled();
         await expect(emailInput).toHaveAttribute('placeholder', 'your@email.com');
+        
         await emailInput.fill('user@demo.com');
         await expect(emailInput).toHaveValue('user@demo.com');
 

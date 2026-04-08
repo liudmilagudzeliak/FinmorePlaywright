@@ -1,15 +1,18 @@
 import {
     test, expect
 } from '@playwright/test';
+import { RegisterPage } from '../pages/RegisterPage';
 import { generatePrime } from 'crypto';
+import { LoginPage2 } from '../pages/LoginTest2';
 test.describe('Check register test functions', () => {
+    let registerPage: RegisterPage;
+    let loginPage: LoginPage2;
+
     test.beforeEach(async ({ page }) => {
+        registerPage = new RegisterPage(page);
+        loginPage = new LoginPage2(page);
+        await registerPage.checkPageLoaded();
         await page.goto('/');
-        await expect(page).toHaveURL('/');
-        await expect(page).toHaveTitle('Повнофункціональний фінансовий менеджер');
-        const registerLink = page.getByTestId('switch-to-register-button');
-        await expect(registerLink).toBeVisible({ timeout: 5000 });
-        await registerLink.click();
     });
 
     test('Check view password icon visability', async ({ page }) => {
