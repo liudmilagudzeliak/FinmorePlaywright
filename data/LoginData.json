@@ -1,0 +1,22 @@
+{
+  "validUser": {
+    "email": "user@demo.com",
+    "password": "user123"
+  },
+  "invalidUser": {
+    "email": "test@test.com",
+    "password": "wrongpassword"
+  },
+  "invalidPassword": {
+    "password": "wrongpassword"
+  },
+  "messages": {
+    "error": "Невірний email або пароль",
+    "registerTitle": "Реєстрація",
+    "registrationText": "Зареєструватися"
+  },
+  "placeholders": {
+    "email": "your@email.com",
+    "password": "Введіть пароль"
+  }
+}

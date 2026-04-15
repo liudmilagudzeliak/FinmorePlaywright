@@ -1,6 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage2 } from "../pages/LoginTest2";
 import { USER } from '../data/LoginData';
+import loginData from '../data/loginData.json';
+import { CreateAccountData } from '../utils/functionGenaratorData/CreateAccountData';
+ 
+ 
 
 //const VALID_EMAIL = 'user@demo.com';
 //const VALID_PASSWORD = 'user123';
@@ -20,12 +24,14 @@ test.describe('Check login test functions', () => {
     });
 
     test('Check  authorithation with valid credentials', async ({ page }) => {
-        await loginPage.login(USER.VALID_EMAIL, USER.VALID_PASSWORD);
+        const user = CreateAccountData.generateUser();
+        await loginPage.login(user.email, user.password);
+        console.log(`Generated user: ${user.email} / ${user.password}`);
         await expect(page).toHaveURL('/');
     });
 
     test('Check  authorithation with ivalid credentials', async ({ page }) => {
-        await loginPage.login(USER.INVALID_EMAIL, USER.INVALID_PASSWORD);
+        await loginPage.login(loginData.invalidUser.email, loginData.invalidUser.password);
         await expect(page).toHaveURL('/');
         await expect(loginPage.errorMessage).toHaveText('Невірний email або пароль');
     });
