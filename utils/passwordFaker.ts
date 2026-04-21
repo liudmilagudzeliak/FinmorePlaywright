@@ -40,6 +40,8 @@ export const generatePassword = () => {
  
     return faker.helpers.shuffle(parts).join('');
 
+    //test
+
 };
 
  
