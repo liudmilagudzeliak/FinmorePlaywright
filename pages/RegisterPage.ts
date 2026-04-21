@@ -37,11 +37,7 @@ export class RegisterPage {
         this.confirmPasswordErrorMessage = page.getByTestId('confirm-password-error');
     }
 
-    async open() {
-        console.log('Opening register page');
-        await this.page.goto('/');
-        await expect(this.page).toHaveURL('/');        
-        await expect(this.switchToRegisterButton).toBeVisible({ timeout: 5000 });
+    async registrationPageOpen() {
         await this.switchToRegisterButton.click();
     }
 

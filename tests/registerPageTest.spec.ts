@@ -4,34 +4,43 @@ import {
 import { RegisterPage } from '../pages/RegisterPage';
 import { generatePrime } from 'crypto';
 import { LoginPage2 } from '../pages/LoginTest2';
-import {REGISTER_DATA} from '../data/RegisterData';
+import { REGISTER_DATA } from '../data/RegisterData';
+import { faker } from '@faker-js/faker';
+import { generatePassword } from '../utils/passwordFaker';
 test.describe('Check register test functions', () => {
     let registerPage: RegisterPage;
     let loginPage: LoginPage2;
 
+    const user = {
+        name: faker.person.firstName(),
+        email: faker.internet.email(),
+        password: generatePassword(),
+    };
+
+
     test.beforeEach(async ({ page }) => {
         registerPage = new RegisterPage(page);
         loginPage = new LoginPage2(page);
-        registerPage.open();
-        registerPage.checkPageLoaded();
+        loginPage.open();
+        registerPage.registrationPageOpen();
     });
 
-        test('Check view password icon visability', async ({ page }) => {
+    test('Check view password icon visability', async ({ page }) => {
         registerPage.checkViewPasswordIconVisibility();
         registerPage.checkConfirmViewPasswordIconVisibility();
     });
 
-    test('Select value from Основна валюта dropdown', async ({ page }) => {
+    test('Select value from Основна валюта dropdown', async () => {
         registerPage.selectCurrency('USD');
     });
-    
+
     //expect(message).not.toBe('');
 
-    test('Check email input validation browser message', async ({ page }) => {
-        registerPage.registerName('REGISTER_DATA.VALID_NAME');
-        registerPage.registerEmail('REGISTER_DATA.INVALID_EMAIL');
-        registerPage.registerPassword('REGISTER_DATA.VALID_PASSWORD');
-        registerPage.registerConfirmPassword('REGISTER_DATA.VALID_PASSWORD');
+    test('Check email input validation browser message', async () => {
+        registerPage.registerName(user.name);
+        registerPage.registerEmail(user.email);
+        registerPage.registerPassword(user.password);
+        registerPage.registerConfirmPassword(user.password);
         registerPage.clickRegisterButton();
         const emailInputErrormessage = await registerPage.registerEmailInput.evaluate((el: HTMLInputElement) => el.validationMessage);
         expect(emailInputErrormessage).toBe("Please include an '@' in the email address. 'inavalidemail' is missing an '@'.");
@@ -52,7 +61,7 @@ test.describe('Check register test functions', () => {
     test('Check registration message for to short name and passworsd', async ({ page }) => {
         registerPage.registerName('REGISTER_DATA.iNVALID_NAME');
         registerPage.registerPassword('REGISTER_DATA.VALID_PASSWORD');
-        registerPage.clickRegisterButton();   
+        registerPage.clickRegisterButton();
         await expect(registerPage.nameErrorMessage).toBeVisible({ timeout: 5000 });
         await expect(registerPage.nameErrorMessage).toHaveText("Ім'я повинно містити мінімум 2 символи");
     });
@@ -60,7 +69,7 @@ test.describe('Check register test functions', () => {
 
     test('Check registration error message for password mismatch', async ({ page }) => {
         registerPage.registerPassword('REGISTER_DATA.VALID_PASSWORD');
-        registerPage.registerConfirmPassword('REGISTER_DATA.VALID_PASSWORD'); 
+        registerPage.registerConfirmPassword('REGISTER_DATA.VALID_PASSWORD');
         registerPage.clickRegisterButton();
         await expect(registerPage.passwordErrorMessage).toHaveText(('Пароль повинен містити мінімум 6 символів'));
     });
@@ -73,10 +82,10 @@ test.describe('Check register test functions', () => {
         registerPage.checkCurrencyDropdownOptions('REGISTER_DATA.CURRENCY.USD');
     });
     test('Check successful registration with valid data', async ({ page }) => {
-        registerPage.registerName('REGISTER_DATA.VALID_NAME');
-        registerPage.registerEmail('REGISTER_DATA.VALID_EMAIL');
-        registerPage.registerPassword('REGISTER_DATA.VALID_PASSWORD');
-        registerPage.registerConfirmPassword('REGISTER_DATA.VALID_PASSWORD');
+        registerPage.registerName(user.name);
+        registerPage.registerEmail(user.email);
+        registerPage.registerPassword(user.password);
+        registerPage.registerConfirmPassword(user.password);
         registerPage.selectCurrency('REGISTER_DATA.CURRENCY.USD');
         registerPage.clickRegisterButton();
         await expect(page).toHaveURL('/');

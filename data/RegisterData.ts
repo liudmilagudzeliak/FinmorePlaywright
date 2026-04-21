@@ -1,4 +1,4 @@
-import { CreateAccountData } from "../utils/functionGenaratorData/CreateAccountData";
+import { CreateAccountData } from "../utils/CreateAccountData";
 export const REGISTER_DATA = {
     VALID_NAME: CreateAccountData.generateRandomName(),
     VALID_EMAIL: CreateAccountData.generateRandomEmail(),
