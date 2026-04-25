@@ -3,10 +3,11 @@ import {
 } from '@playwright/test';
 import { RegisterPage } from '../pages/RegisterPage';
 import { generatePrime } from 'crypto';
-import { LoginPage2 } from '../pages/LoginTest2';
+import { LoginPage2 } from '../pages/Auth/LoginTest2';
 import { REGISTER_DATA } from '../data/RegisterData';
 import { faker } from '@faker-js/faker';
 import { generatePassword } from '../utils/passwordFaker';
+
 test.describe('Check register test functions', () => {
     let registerPage: RegisterPage;
     let loginPage: LoginPage2;
@@ -21,8 +22,9 @@ test.describe('Check register test functions', () => {
     test.beforeEach(async ({ page }) => {
         registerPage = new RegisterPage(page);
         loginPage = new LoginPage2(page);
-        loginPage.open();
-        registerPage.registrationPageOpen();
+        await loginPage.open();
+        await registerPage.registrationPageOpen();
+        await registerPage.checkPageLoaded();
     });
 
     test('Check view password icon visability', async ({ page }) => {
@@ -37,13 +39,18 @@ test.describe('Check register test functions', () => {
     //expect(message).not.toBe('');
 
     test('Check email input validation browser message', async () => {
-        registerPage.registerName(user.name);
-        registerPage.registerEmail(user.email);
-        registerPage.registerPassword(user.password);
-        registerPage.registerConfirmPassword(user.password);
-        registerPage.clickRegisterButton();
-        const emailInputErrormessage = await registerPage.registerEmailInput.evaluate((el: HTMLInputElement) => el.validationMessage);
+       await registerPage.registerName(user.name);
+        await registerPage.registerEmail(user.email);
+        await registerPage.registerPassword(user.password);
+        await registerPage.registerConfirmPassword(user.password);
+        await registerPage.clickRegisterButton();        
+        const emailInputErrormessage = await registerPage.registerEmailInput.evaluate((el: HTMLInputElement) => el.validationMessage
         expect(emailInputErrormessage).toBe("Please include an '@' in the email address. 'inavalidemail' is missing an '@'.");
+
+
+ 
+
+ 
     });
 
     test('Check registration error messages for empty fields ', async ({ page }) => {
@@ -59,8 +66,8 @@ test.describe('Check register test functions', () => {
     });
 
     test('Check registration message for to short name and passworsd', async ({ page }) => {
-        registerPage.registerName('REGISTER_DATA.iNVALID_NAME');
-        registerPage.registerPassword('REGISTER_DATA.VALID_PASSWORD');
+        registerPage.registerName(REGISTER_DATA.INVALID_NAME);
+        registerPage.registerPassword(REGISTER_DATA.VALID_PASSWORD);
         registerPage.clickRegisterButton();
         await expect(registerPage.nameErrorMessage).toBeVisible({ timeout: 5000 });
         await expect(registerPage.nameErrorMessage).toHaveText("Ім'я повинно містити мінімум 2 символи");
@@ -68,8 +75,8 @@ test.describe('Check register test functions', () => {
 
 
     test('Check registration error message for password mismatch', async ({ page }) => {
-        registerPage.registerPassword('REGISTER_DATA.VALID_PASSWORD');
-        registerPage.registerConfirmPassword('REGISTER_DATA.VALID_PASSWORD');
+        registerPage.registerPassword(REGISTER_DATA.VALID_PASSWORD);
+        registerPage.registerConfirmPassword(REGISTER_DATA.VALID_PASSWORD);
         registerPage.clickRegisterButton();
         await expect(registerPage.passwordErrorMessage).toHaveText(('Пароль повинен містити мінімум 6 символів'));
     });
@@ -79,16 +86,36 @@ test.describe('Check register test functions', () => {
     });
 
     test('Check curreccy drop-down default value', async ({ page }) => {
-        registerPage.checkCurrencyDropdownOptions('REGISTER_DATA.CURRENCY.USD');
+        registerPage.checkCurrencyDropdownOptions(REGISTER_DATA.CURRENCY.USD);
     });
     test('Check successful registration with valid data', async ({ page }) => {
         registerPage.registerName(user.name);
         registerPage.registerEmail(user.email);
         registerPage.registerPassword(user.password);
         registerPage.registerConfirmPassword(user.password);
-        registerPage.selectCurrency('REGISTER_DATA.CURRENCY.USD');
+        registerPage.selectCurrency(REGISTER_DATA.CURRENCY.UAH);
         registerPage.clickRegisterButton();
         await expect(page).toHaveURL('/');
     });
+
+
+    async registerName(name: string) {
+        await Actions.fillField(this.nameInput, name, 'Name input');
+    }
+
+    async clickRegisterButton() {
+
+        await Actions.click(this.registerButton, 'Register button');
+
+    }
+ 
+  async getEmailValidity() {
+
+        return await Actions.getValidity(this.emailInput, 'Email field');
+
+    }
+
+}
+ 
 
 });

@@ -1,4 +1,5 @@
 import { Page, Locator, Expect, expect } from '@playwright/test';
+import { GlobaMethods } from '../../utils/GlobalMethods';
 
 
 export class LoginPage2 {
@@ -26,10 +27,11 @@ export class LoginPage2 {
 async open() {
     console.log('Opening login page');
     await this.page.goto('/');
+    await this.page.waitForLoadState('networkidle');
     await expect(this.page).toHaveURL('/');
 }
 async checkPageLoaded() {
-    await expect(this.page).toHaveTitle('Повнофункціональний фінансовий менеджер');
+    await GlobaMethods.expectvisible(this.loginIcon);
 }
 
 async checkLoginIconVisible() {

@@ -1,95 +1,45 @@
 import { test, expect } from "@playwright/test";
+import { createAccount } from "../utils/apidatahelper/AccountDataHelper";
+import { faker } from '@faker-js/faker';
+import { RegisterPage } from "../pages/Auth/RegisterPage";
+import { AccountDashboardPage } from "../pages/AccountDashboard/AccountDashboardPage";
+import { LoginPage } from "../pages/Auth/LoginTest";
+import { HeaderComponent } from "../components/HeaderComponent";
+import { TransactionForm } from "../pages/TransactionsPages/TransactionForm";
+
 
 test.describe('Check dashboard test functions', () => {
+    let registerPage: RegisterPage;
+    let accountDashboardPage: AccountDashboardPage;
+    let loginPage: LoginPage;
+    let headerComponent: HeaderComponent;
+    let transactionsForm: TransactionForm;
     test.beforeEach(async ({ page }) => {
+        accountDashboardPage = new AccountDashboardPage(page);
+        registerPage = new RegisterPage(page);
+        loginPage = new LoginPage(page);
+        headerComponent = new HeaderComponent(page);
+        transactionsForm = new TransactionForm(page);
         //Create new user and log in before each test
+        await createAccount(page, {
+            name: faker.person.firstName(),
+            email: faker.internet.email(),
+            password: faker.internet.password(),
+        });
+
         await page.goto('/');
     });
     test('Check that User can log out from dashboard', async ({ page }) => {
-
-        //Create new account
-        //Click on register link
-        const registerLink = page.getByTestId('switch-to-register-button');
-        await expect(registerLink).toBeVisible({ timeout: 5000 });
-        await registerLink.click();
-        //Fill in the name       
-        const registerName = page.getByTestId('register-name-input');
-        await expect(registerName).toBeVisible({ timeout: 5000 });
-        await expect(registerName).toBeEnabled();
-        await registerName.fill('AUTOTEST');
-        //Fill in the email
-        const emailInput = page.getByTestId('register-email-input');
-        await expect(emailInput).toBeVisible({ timeout: 5000 });
-        await expect(emailInput).toBeEnabled();
-        await emailInput.fill('email@email.com');
-        //Fill in the password
-        const registerPasswordInput = page.getByTestId('register-password-input');
-        await expect(registerPasswordInput).toBeVisible({ timeout: 5000 });
-        await expect(registerPasswordInput).toBeEnabled();
-        await registerPasswordInput.fill('test123');
-        //Fill in the confirm password
-        const registerConfirmPasswordInput = page.getByTestId('register-confirm-password-input');
-        await expect(registerConfirmPasswordInput).toBeVisible({ timeout: 5000 });
-        await expect(registerPasswordInput).toBeEnabled();
-        await registerConfirmPasswordInput.fill('test123');
-        //Click on register button
-        const registerButton = page.getByTestId('register-submit-button');
-        await expect(registerButton).toBeVisible({ timeout: 5000 });
-        await expect(registerButton).toBeEnabled
-        await registerButton.click();
-        //Log out from dashboard
-        //CLick on user settings button
-        const UserSettingsButton = page.getByTestId('user-menu-trigger');
-        await expect(UserSettingsButton).toBeVisible({ timeout: 5000 });
-        await expect(UserSettingsButton).toBeEnabled();
-        await UserSettingsButton.click();
-        //Click on log out button
-        const logoutButton = page.getByTestId('logout-button');
-        await expect(logoutButton).toBeVisible({ timeout: 5000 });
-        await expect(logoutButton).toBeEnabled();
-        await logoutButton.click();
-        //Check that user is logged out and Register page is visible
-        const pageH1 = page.getByTestId('register-title');
-        await expect(pageH1).toBeVisible({ timeout: 6000 });
-        await expect(pageH1).toHaveText('Реєстрація');
+        
+        await registerPage.checkPageLoaded();
+        await headerComponent.openUserMenu();
+        await headerComponent.clickLogoutButton();
+        await loginPage.checkPageLoaded();
     });
 
     test('Check that User can enter dohid', async ({ page }) =>  {
-        //Create new account
-        //Click on register link
-        const registerLink = page.getByTestId('switch-to-register-button');
-        await expect(registerLink).toBeVisible({ timeout: 5000 });
-        await registerLink.click();
-        //Fill in the name       
-        const registerName = page.getByTestId('register-name-input');
-        await expect(registerName).toBeVisible({ timeout: 5000 });
-        await expect(registerName).toBeEnabled();
-        await registerName.fill('AUTOTEST');
-        //Fill in the email
-        const emailInput = page.getByTestId('register-email-input');
-        await expect(emailInput).toBeVisible({ timeout: 5000 });
-        await expect(emailInput).toBeEnabled();
-        await emailInput.fill('email@email.com');
-        //Fill in the password
-        const registerPasswordInput = page.getByTestId('register-password-input');
-        await expect(registerPasswordInput).toBeVisible({ timeout: 5000 });
-        await expect(registerPasswordInput).toBeEnabled();
-        await registerPasswordInput.fill('test123');
-        //Fill in the confirm password
-        const registerConfirmPasswordInput = page.getByTestId('register-confirm-password-input');
-        await expect(registerConfirmPasswordInput).toBeVisible({ timeout: 5000 });
-        await expect(registerPasswordInput).toBeEnabled();
-        await registerConfirmPasswordInput.fill('test123');
-        //Click on register button
-        const registerButton = page.getByTestId('register-submit-button');
-        await expect(registerButton).toBeVisible({ timeout: 5000 });
-        await expect(registerButton).toBeEnabled
-        await registerButton.click();
-        //Open new transaction pop-up
-        const addTransactionButton = page.getByTestId('add-transaction-button');
-        await expect(addTransactionButton).toBeVisible({ timeout: 5000 });
-        await expect(addTransactionButton).toBeEnabled();
-        await addTransactionButton.click();
+       
+            await transactionsForm.openTransactionForm();
         //Click income button
         const incomeButton = page.getByTestId('income-type-button');
         await expect(incomeButton).toBeVisible({ timeout: 5000 });
@@ -114,7 +64,7 @@ test.describe('Check dashboard test functions', () => {
         await descriptionInput.fill('test');
         //Enter date
         const dateInput = page.getByTestId('transaction-date-input');
-        await expect(dateInput).tobeVisible({ timeout: 5000 });
+        await expect(dateInput).toBeVisible({ timeout: 5000 });
         await expect(dateInput).toBeEnabled();
         await dateInput.fill('2024-06-01');
         //Select account

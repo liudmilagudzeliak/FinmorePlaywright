@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage2 } from "../pages/LoginTest2";
+import { LoginPage2 } from "../pages/Auth/LoginTest2";
 import { USER } from '../data/LoginData';
 
 //const VALID_EMAIL = 'user@demo.com';

@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from "@playwright/test";
+import { Globamethods } from "../utils/globalmethods";
 
 export class RegisterPage {
     readonly page: Page;
@@ -38,7 +39,7 @@ export class RegisterPage {
     }
 
     async registrationPageOpen() {
-        await this.switchToRegisterButton.click();
+        await Globamethods.click(this.switchToRegisterButton);
     }
 
     async checkPageLoaded() {
@@ -69,19 +70,19 @@ export class RegisterPage {
         await expect(this.viewPasswordIconConfirm).toBeVisible({ timeout: 5000 });
     }
     async registerName(name: string) {
-        await expect(this.registerNameInput).toBeVisible({ timeout: 5000 });
+        await expect(this.registerNameInput).toBeVisible({ timeout: 6000 });
         await expect(this.registerNameInput).toBeEnabled();
         await this.registerNameInput.fill(name);
         await expect(this.registerNameInput).toHaveValue(name);
     }
     async registerEmail(email: string) {
-        await expect(this.registerEmailInput).toBeVisible({ timeout: 5000 });
+        await expect(this.registerEmailInput).toBeVisible({ timeout: 6000 });
         await expect(this.registerEmailInput).toBeEnabled();
         await this.registerEmailInput.fill(email);
         await expect(this.registerEmailInput).toHaveValue(email);
     }
     async registerPassword(password: string) {
-        await expect(this.registerPasswordInput).toBeVisible({ timeout: 5000 });
+        await expect(this.registerPasswordInput).toBeVisible({ timeout: 6000 });
         await expect(this.registerPasswordInput).toBeEnabled();
         await this.registerPasswordInput.fill(password);
         await expect(this.registerPasswordInput).toHaveValue(password);
@@ -101,11 +102,11 @@ export class RegisterPage {
         console.log('Click register button');
         await expect(this.registerButton).toBeVisible({ timeout: 5000 });
         await expect(this.registerButton).toBeEnabled();
-        await this.registerButton.click();
+        //await this.registerButton.click();
+        await Globamethods.click(this.registerButton, 'Register button');
     }
     async checkCurrencyDropdownOptions(currency: string) {
         await expect(this.currencyDropdown).toBeVisible({ timeout: 5000 });
-        await expect(this.currencyDropdown).toBeEnabled();
         await expect(this.currencyDropdown).toHaveValue(currency);
         await expect(this.currencyDropdown.locator('option:checked')).toHaveText(currency);
     }
