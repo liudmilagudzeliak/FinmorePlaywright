@@ -1,11 +1,11 @@
 import { test, expect } from "@playwright/test";
-import { createAccount } from "../utils/apidatahelper/AccountDataHelper";
 import { faker } from '@faker-js/faker';
 import { RegisterPage } from "../pages/Auth/RegisterPage";
 import { AccountDashboardPage } from "../pages/AccountDashboard/AccountDashboardPage";
 import { LoginPage } from "../pages/Auth/LoginTest";
 import { HeaderComponent } from "../components/HeaderComponent";
 import { TransactionForm } from "../pages/TransactionsPages/TransactionForm";
+import { createAccount } from "../utils/apidatahelper/AccountDataHelper";
 
 
 test.describe('Check dashboard test functions', () => {
@@ -26,6 +26,7 @@ test.describe('Check dashboard test functions', () => {
             email: faker.internet.email(),
             password: faker.internet.password(),
         });
+        
 
         await page.goto('/');
     });

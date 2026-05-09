@@ -30,7 +30,8 @@ export class GlobalMethods {
 
             await locator.fill(value);
 
-            await locator.fill(value);
+            await expect(locator).toHaveValue(value);
+
  
             console.log(`[FILL SUCCESS] ${name}`);
 
@@ -54,7 +55,7 @@ static async click(locator: Locator, elementName?: string) {
  
             await locator.waitFor({ state: 'visible' });
 
-            await locator.click();
+            await locator.click({timeout:5000});
  
             console.log(`[CLICK SUCCESS] ${name}`);
 
@@ -107,12 +108,12 @@ static async click(locator: Locator, elementName?: string) {
             throw new Error(`Element ${element} is not visible`);
         }
     }
-           static async expectHidden(Locator: Locator, name?: string) {
+           static async expectHidden(locator: Locator, name?: string) {
             const element  = name || 'element';
 
             try {
                 console.log('[Expect Hidden] ' + element);
-                await expect(Locator).toBeHidden();
+                await expect(locator).toBeHidden();
                 console.log('[Hidden] ' + element);
             } catch (error) {
                 console.error('[Not Hidden] ' + element);
