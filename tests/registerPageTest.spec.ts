@@ -1,7 +1,7 @@
 import {
     test, expect
 } from '@playwright/test';
-import { RegisterPage } from '../pages/RegisterPage';
+import { RegisterPage } from '../pages/Auth/RegisterPage';
 import { generatePrime } from 'crypto';
 import { LoginPage2 } from '../pages/Auth/LoginTest2';
 import { REGISTER_DATA } from '../data/RegisterData';
@@ -44,7 +44,7 @@ test.describe('Check register test functions', () => {
         await registerPage.registerPassword(user.password);
         await registerPage.registerConfirmPassword(user.password);
         await registerPage.clickRegisterButton();        
-        const emailInputErrormessage = await registerPage.registerEmailInput.evaluate((el: HTMLInputElement) => el.validationMessage
+        const emailInputErrormessage = await registerPage.registerEmailInput.evaluate((el: HTMLInputElement) => el.validationMessage);
         expect(emailInputErrormessage).toBe("Please include an '@' in the email address. 'inavalidemail' is missing an '@'.");
 
 
@@ -97,25 +97,4 @@ test.describe('Check register test functions', () => {
         registerPage.clickRegisterButton();
         await expect(page).toHaveURL('/');
     });
-
-
-    async registerName(name: string) {
-        await Actions.fillField(this.nameInput, name, 'Name input');
-    }
-
-    async clickRegisterButton() {
-
-        await Actions.click(this.registerButton, 'Register button');
-
-    }
- 
-  async getEmailValidity() {
-
-        return await Actions.getValidity(this.emailInput, 'Email field');
-
-    }
-
-}
- 
-
 });

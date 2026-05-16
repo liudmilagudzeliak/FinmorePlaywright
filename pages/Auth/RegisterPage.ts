@@ -1,5 +1,5 @@
 import { Page, Locator, expect } from "@playwright/test";
-import { Globamethods } from "../utils/globalmethods";
+import { GlobalMethods } from "../../utils/GlobalMethods";
 
 export class RegisterPage {
     readonly page: Page;
@@ -39,7 +39,7 @@ export class RegisterPage {
     }
 
     async registrationPageOpen() {
-        await Globamethods.click(this.switchToRegisterButton);
+        await GlobalMethods.click(this.switchToRegisterButton);
     }
 
     async checkPageLoaded() {
@@ -103,7 +103,7 @@ export class RegisterPage {
         await expect(this.registerButton).toBeVisible({ timeout: 5000 });
         await expect(this.registerButton).toBeEnabled();
         //await this.registerButton.click();
-        await Globamethods.click(this.registerButton, 'Register button');
+        await GlobalMethods.click(this.registerButton, 'Register button');
     }
     async checkCurrencyDropdownOptions(currency: string) {
         await expect(this.currencyDropdown).toBeVisible({ timeout: 5000 });

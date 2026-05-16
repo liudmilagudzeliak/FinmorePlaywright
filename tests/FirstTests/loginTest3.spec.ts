@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage2 } from "../pages/Auth/LoginTest2";
-import { USER } from '../data/LoginData';
+import { LoginPage2 } from "../../pages/Auth/LoginTest2";
+import { USER } from '../../data/../data/LoginData';
 
 //const VALID_EMAIL = 'user@demo.com';
 //const VALID_PASSWORD = 'user123';

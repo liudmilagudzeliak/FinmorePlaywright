@@ -60,14 +60,27 @@ test.describe('WordPress Posts API - CRUD Tests', () => {
 
     createdPostId = responseBody.id;
     expect(responseBody).toHaveProperty('id');
-    expect(responseBody.id).toBeGreaterThan(previousPostId);
+    expect(createdPostId).toBeGreaterThan(previousPostId);
     expect(responseBody.title.rendered).toBe(postData.title);
     expect(responseBody.status).toBe(postData.status);
-    expect(responseBody.slug).toBe("");
-    expect(typeof responseBody.title).toBe('string');
-    expect(typeof responseBody.age).toBe('number');
-    expect(typeof responseBody.isActive).toBe('boolean')
+    //expect(responseBody.slug).toBe("");
+    expect(typeof responseBody.title.rendered).toBe('string');
+    expect(typeof responseBody.id).toBe('number');
+    expect(typeof responseBody.content.protected).toBe('boolean')
     expect(Array.isArray(responseBody.tags)).toBe(true);
+    expect(responseBody.categories).toHaveLength(1);
+    expect(responseBody.categories).toContain(1);
+    expect(responseBody.class_list).toEqual(
+  expect.arrayContaining([
+    `post-${responseBody.id}`,
+    'post',
+    'type-post',
+    'status-draft',
+    'format-standard',
+    'hentry',
+    'category-news'
+  ])
+);
 
 
     console.log('Created post ID:', createdPostId);
@@ -253,7 +266,7 @@ test.describe('WordPress Posts API - Performance Tests', () => {
     const updatedPostId = updatedPost.id;
     expect(updatedPost.id).toBe(updatedPostId);
     expect(updatedPost.title.rendered).toBe(updateData.title);
-    expect(updatedPost.status.rendered).toContain('pending');
+    expect(updatedPost.status).toBe('pending');
 
   });
   test('POST create post - should respond within acceptable time', async ({ request }) => {

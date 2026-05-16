@@ -1,5 +1,5 @@
 import { Page, Locator, Expect, expect } from '@playwright/test';
-import { GlobaMethods } from '../../utils/GlobalMethods';
+import { GlobalMethods } from "../../utils/GlobalMethods";
 
 
 export class LoginPage2 {
@@ -31,7 +31,7 @@ async open() {
     await expect(this.page).toHaveURL('/');
 }
 async checkPageLoaded() {
-    await GlobaMethods.expectvisible(this.loginIcon);
+    await GlobalMethods.expectvisible(this.loginIcon);
 }
 
 async checkLoginIconVisible() {
